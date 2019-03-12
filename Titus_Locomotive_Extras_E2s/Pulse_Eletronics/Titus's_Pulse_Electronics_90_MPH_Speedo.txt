@@ -1,0 +1,155 @@
+@name Titus's Pulse Electronics 90 MPH Speedo
+@inputs MPH GaugeLight
+@outputs Emergency
+@persist [MainBodyColor InnerBodyColor SpeedoColor SpeedoColorQ]:vector [MainBodyTexture InnerBodyTexture SpeedoTexture]:string Mount Ang OverSpeedTrip
+@trigger 
+@model models/sprops/cuboids/height06/size_1/cube_6x6x6.mdl
+ 
+E = entity()
+E:setAlpha(0)
+#- Model Info
+SerialNumber = 409138
+ModelNumber = "SI-60"
+
+#[  Welcome to Titus's Pulse Electronics 90 MPH Speedo E2!
+    This E2 simulates a Model SI-60 Speedo from Pulse Electronics.
+
+    I- Installation Instructions
+       A- Spawn in the E2 on the ground somewhere
+       B- Set the "MainBodyColor" To whatever Color you want the Speedo's Main Body to be
+       C- Set the "InnerBodyColor" To the same as above, Or whatever you like. (Included because some Railroads have the inner speedo painted)
+       D- Set the "MainBodyTexture" To whatever Texture you want the Main Body to be
+       E- Set the "InnerBodyTexture" To the same as above. (Included because some Railroads have the inner speedo painted)
+       F- Move the E2 to where you want to mount the Speedo
+       G- Multiparent the E2 to the Locomotive Base/Body or a Gate
+    
+   II- Wiring Instructions
+       A- Wire the "MPH" Input to the MPH Output of the RLC or whatever moves your Locomotive
+       B- Wire the "Emergency" Output of the Speedo E2 to the RLCs Emergency Brake Input if free
+       C- Wire the "GaugeLight" Input to a Toggled Switch on your Locomotive, to turn on the Gauge Light when it gets dark
+    
+  III- Optional Instructions
+       A- Set the "OverSpeedTrip" To the Locomotives Max Speed, Usally 55
+       B- Set the "Mount" to 1 to use the included Control Stand Mounting Bracket, Set to 0 to Remove        
+
+]#
+
+MainBodyColor = vec(255)
+MainBodyTexture = "models/proppertextures/acrylic"
+
+InnerBodyColor = vec(255)
+InnerBodyTexture = "models/proppertextures/acrylic"
+
+SpeedoColor = vec(180)
+SpeedoTexture = "models/gsgtrainprops/cab/speedo_white_freight"
+
+Mount = 1
+OverSpeedTrip = 55 
+
+if(first() | dupefinished()){
+      
+#---- Main Body
+
+    A = 1
+    holoCreate(A)
+    holoParent(A,E)
+    holoColor(A,MainBodyColor)
+    holoScale(A,vec(0.9,1,1))
+    holoModel(A, "models/sprops/cuboids/height06/size_1/cube_6x6x6.mdl")
+    holoMaterial(A,MainBodyTexture)
+    holoPos(A,E:toWorld(vec(0,0,0)))
+    holoAng(A,E:toWorld(ang(0,0,0)))
+    
+    A = 2
+    holoCreate(A)
+    holoParent(A,E)
+    holoColor(A,MainBodyColor)
+    holoScale(A,vec(0.1,1.05,1.05))
+    holoModel(A, "models/sprops/cuboids/height06/size_1/cube_6x6x6.mdl")
+    holoMaterial(A,MainBodyTexture)
+    holoPos(A,E:toWorld(vec(3,0,0)))
+    holoAng(A,E:toWorld(ang(0,0,0)))
+    
+#---- Speedo Body
+
+    A = 3
+    holoCreate(A)
+    holoParent(A,E)
+    holoColor(A,InnerBodyColor)
+    holoScale(A,vec(0.45,0.45,0.1))
+    holoModel(A, "models/holograms/octagon.mdl")
+    holoMaterial(A,InnerBodyTexture)
+    holoPos(A,E:toWorld(vec(3,0,0)))
+    holoAng(A,E:toWorld(ang(22.5,90,90)))
+    
+    A = 4
+    holoCreate(A)
+    holoParent(A,E)
+    holoColor(A,InnerBodyColor)
+    holoScale(A,vec(0.35,0.35,0.05))
+    holoModel(A, "models/holograms/hq_tube_thin.mdl")
+    holoMaterial(A,InnerBodyTexture)
+    holoPos(A,E:toWorld(vec(3.4,0,0)))
+    holoAng(A,E:toWorld(ang(90,0,0)))
+    
+#---- Speedo
+
+    A = 5
+    holoCreate(A)
+    holoParent(A,E)
+    holoColor(A,vec(255))
+    holoScale(A,vec(0.34))
+    holoModel(A, "cplane")
+    holoMaterial(A,SpeedoTexture)
+    holoPos(A,E:toWorld(vec(3.67,0,0)))
+    holoAng(A,E:toWorld(ang(90,0,0)))
+    
+    A = 6
+    holoCreate(A)
+    holoParent(A,E)
+    holoColor(A,vec(0))
+    holoScale(A,vec(0.62))
+    holoModel(A, "models/jazzie/trains/locomotives/emd/cab/speedometer_pointer.mdl")
+    holoMaterial(A,"")
+    holoPos(A,E:toWorld(vec(3.8,0,0)))
+    holoAng(A,E:toWorld(ang(149.5,90,90)))
+    
+#---- Ctrl Stand Mount
+
+if(Mount){
+    
+    A = 10
+    holoCreate(A)
+    holoParent(A,E)
+    holoColor(A,MainBodyColor)
+    holoScale(A,vec(0.6,1.25,0.02))
+    holoModel(A, "models/sprops/cuboids/height06/size_1/cube_6x6x6.mdl")
+    holoMaterial(A,MainBodyTexture)
+    holoPos(A,E:toWorld(vec(0,0,-2.96)))
+    holoAng(A,E:toWorld(ang(0,0,0)))
+}
+
+}
+interval(150)
+
+Ang = Ang + ( MPH - Ang ) /  max( 10, 0 )   
+holoAng(6,entity():toWorld(ang(149.5+(Ang * 2.66),90,90)))
+
+if(MPH>OverSpeedTrip){
+    Emergency = 1
+}
+if(Emergency==1&MPH<1){
+    Emergency = 0
+}
+
+if(GaugeLight){
+    holoColor(5,vec(255,212,126))
+}
+else{
+  holoColor(5,SpeedoColor)  
+}
+
+
+
+
+
