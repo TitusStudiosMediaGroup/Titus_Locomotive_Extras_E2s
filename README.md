@@ -1,11 +1,22 @@
-Welcome To Titus's Locomotive Extras E2 Pack
+### Titus's Locomotive Extras E2s Pack
 
-**Basic Idea**
-A- Detailed E2s for detailing EMD / GE Locomotives
-B- E2 Pack made my Titus Studios Meda Group
-C- To be only used on Garry's Mod Train Build Servers
+What does this mean?
+My E2 is now publicly available for use. The version found on here should be stable, however, there is always the chance that some bugs may remain in the code. Future updates are certain, and you will need to update your locomotives as time goes by. That means updating E2s, re-wiring dupes.
 
-**Install**
-A- Hit the Download / Clone Button to download a .Zip File
-B- Extract the files into your Garry's Mod Data Files - garrysmod\garrysmod\data\expression2\
-C- Reload Expression 2 In-Game and the E2 folder "Titus Locomotive Extras E2s"
+## To Install (The *Apparently* Hard Way, since so many people screw it up):
+
+1. Click the "Clone or Download" button on the righthand side of the screen and select "Download Zip."
+2. Open the Zip file using a program like WinZip or WinRar, if it didn't open automatically.
+3. Navigate __INTO__ the "Titus_Locomotive_Extras_E2s" Folder.
+4. Extract the folder directly into: `<Your active steam directory>\SteamApps\common\Garry's Mod\garrysmod\data\expression2\`.
+The file path should then look like `expression2\Titus_Locomotive_Extras_E2s\...`.
+
+You will also need **ALL** Of Titus's Garrys Mod Addons *(Yes all)* for it to work correctly. There are three:
+
+Find All Of Them Here: https://steamcommunity.com/id/TitusStudiosMediaGroup/myworkshopfiles/
+
+If you're currently in-game in Garry's Mod, open the E2 Editor, and click the "Update" button under the list of E2s on the lefthand side of the window.
+
+## Changelog
+
+[29/03/19] 1.0.26 E2 Pack Relased, Remade the Github for Easy Use.
