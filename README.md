@@ -11,7 +11,7 @@ My E2 is now publicly available for use. The version found on here should be sta
 4. Extract the folder directly into: `<Your active steam directory>\SteamApps\common\Garry's Mod\garrysmod\data\expression2\`.
 The file path should then look like `expression2\Titus_Locomotive_Extras_E2s\...`.
 
-You will also need **ALL** Of Titus's Garrys Mod Addons *(Yes all)* for it to work correctly. There are three:
+You will also need **ALL** Of Titus's Garrys Mod Addons *(Yes all)* for it to work correctly. There are five:
 
 Find All Of Them Here: https://steamcommunity.com/id/TitusStudiosMediaGroup/myworkshopfiles/
 
@@ -20,3 +20,4 @@ If you're currently in-game in Garry's Mod, open the E2 Editor, and click the "U
 ## Changelog
 
 [29/03/19] 1.0.26 E2 Pack Relased, Remade the Github for Easy Use.
+[02/04/19] 1.0.27 Updated some minor install infomation errors, No changes to the E2s.
