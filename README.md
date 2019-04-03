@@ -20,4 +20,5 @@ If you're currently in-game in Garry's Mod, open the E2 Editor, and click the "U
 ## Changelog
 
 [29/03/19] 1.0.26 E2 Pack Relased, Remade the Github for Easy Use.
+
 [02/04/19] 1.0.27 Updated some minor install infomation errors, No changes to the E2s.
