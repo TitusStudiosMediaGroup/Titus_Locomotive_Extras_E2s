@@ -1,0 +1,121 @@
+@name Titus's Jazzlok - RLC "Sound-verter" V2.0! [EMD 567 D2 Preset]
+@inputs Locomotive:entity On1 Notch
+@outputs PitchSmoothed
+@persist SmoothTable:table [EngineSoundIdle EngineSoundFull EngineRumbleSound]:string ShutdownDampening NotchCalculated DefaultPitch Tune FullTune DefaultFullPitch DefaultFullVolumeGain DefaultRumblePitch
+@persist RumbleTune DefaultRumbleVolumeGain RevDampening Smooth DefaultEngineVolume
+@trigger
+@model
+
+#[  Welcome to Titus's Jazzlok - RLC "Sound-verter" V2.0!
+    This E2 allows you to use Jazzlok Engine sounds (or otherwise pitch shifting, looped start ~ idle sounds) with RLC!
+    
+    This E2 is compatible with:
+    * RLC Pt Beta
+    * RLC Gamma (RLC Pt2)
+    * RLC AB
+    * RLC Titus V3
+    * RLC Ti
+    * Etc, Etc, Etc... Anything with a Engine On, and, Notch output will work!
+
+    I- Installation Instructions
+       A- Spawn the E2 on your Locomotive (In a suitible location)
+       C- Setup the E2 settings, Explained below this information section!
+       D- Setup your RLC to MUTE ALL ENGINE SOUNDS, Not controller sounds, the engine itself. DO NOT remove the sounds, keep the transitions, but mute the RLC.
+       To do this: Open the RLC in your Expression 2 Editor, Scroll to the VERY bottom on the RLC, and paste one of the following bits of code (CHOOSE THE RIGHT RLC!!!)
+    
+       For PT (or other RLC's) Use:
+       soundVolume(0,0)
+    
+       For PT2 (Gamma), just remove the sounds from the config file, even though I said not too :)
+    
+       E- Multiparent to the Locomotive Base or Gate
+
+   II- Wiring Instructions
+       A- Wire the "Locomotive [Entity]" Input to the Locomotives Body, this is so the sounds play on the body of the loco, and not out of the E2
+       B- Wire the "On1" Input to the RLC's "On" Output, or an output that is On when the locomotive is started
+       C- Wire the "Notch" to the RLC's Notch output, Use "RealNotch" for PT1 (beta) OR use "Notch" on RLC PT2 (Gamma) this is so trasitions don't affect the reving.     
+]#
+
+if(first() | dupefinished()){
+   
+    # Sound Strings
+    EngineSoundIdle = "_jazzlok/diesel_engines/emd_engines/emd567d2_startup.wav"
+    EngineSoundFull = "_jazzlok/diesel_engines/emd_engines/emd567d2_whine.wav"
+    EngineRumbleSound = "_jazzlok/diesel_engines/emd_engines/emd567_rumble03.wav"
+    
+    # Dampening Settings - How Smooth the reving is. Higher value, smoother, but slower. Lower value, Choppier yet Faster
+    RevDampening = 40 #Engine Rev Up / Down Dampening Value
+    ShutdownDampening = 20 #Shutdown Dampening Value
+    
+    # Pitch / Tuning Settings - The Pitch the engine will be at full RPM. 1 = 200 pitch, 0.5 = 100 pitch
+    Tune = 1.5 #Full Main Engine Pitch
+    FullTune = 0.8 #Full RPM Sound Engine Pitch
+    RumbleTune = 0.5 #Full Rumble Sound Pitch
+    
+    # Default Pitch Settings
+    DefaultPitch = 100 #Default Pitch the Engine Sound is played at idle
+    DefaultFullPitch = 50 #Default Pitch the Full RPM Engine Sound is played at idle
+    DefaultRumblePitch = 50 #Default Pitch the Rumble Sound is played at idle
+    
+    # Effect(s) Volume Gain (via, rev)
+    DefaultFullVolumeGain = 50 #Full Rumble Sound Pitch
+    DefaultRumbleVolumeGain = 100 #Full Rumble Sound Pitch
+    
+    DefaultEngineVolume = 1 #How Loud the engine sound is, NOT GAIN VOLUME! - 1 Max, 0 Min.
+
+
+    # Made by Titus
+    # https://titusstudiosmediagroup.github.io/
+
+function number smooth(Var,SmoothAmount,ID:string,DefaultVal){ #smoothes out a number using delta dampening
+    if(!SmoothTable:exists(ID)) {
+        SmoothTable[ID,number] = DefaultVal
+    }
+    local Smooth = SmoothTable[ID,number]
+    Smooth += (Var-Smooth) / SmoothAmount
+    SmoothTable[ID,number] = Smooth
+    return Smooth
+}        
+}
+
+
+#engine startup
+
+if(changed(On1)&On1){
+    Locomotive:soundPlay(0,0,EngineSoundIdle)
+    Locomotive:soundPlay(1,0,EngineSoundFull)
+    Locomotive:soundPlay(2,0,EngineRumbleSound)
+}
+
+if(On1){
+    
+#variable notch calculations
+NotchCalculated = Notch*0.125
+
+#pitch blending
+interval(100)
+
+PitchSmoothed = smooth(NotchCalculated,RevDampening,"pitchdampening",0)
+
+soundPitch(0,((PitchSmoothed*100)*Tune) + DefaultPitch)
+soundVolume(0,DefaultEngineVolume)
+
+soundVolume(1,((PitchSmoothed*100))*FullTune / DefaultFullVolumeGain)
+soundPitch(1,((PitchSmoothed*100))*FullTune + DefaultFullPitch)
+
+soundVolume(2,((PitchSmoothed*100))*RumbleTune / DefaultRumbleVolumeGain)
+soundPitch(2,DefaultRumblePitch)
+
+}
+
+# engine shutdown
+if(changed(On1)&!On1){
+    soundPitch(0,0,ShutdownDampening)
+    soundVolume(0,0,ShutdownDampening)
+    soundPitch(1,0,ShutdownDampening)
+    soundVolume(1,0,ShutdownDampening)
+    soundPitch(2,0,ShutdownDampening)
+    soundVolume(2,0,ShutdownDampening)
+    Smooth = 0
+    SmoothTable:clear()
+}
