@@ -1,5 +1,9 @@
 # Titus's Locomotive Extras E2s Pack
 
+![Build-Status](https://img.shields.io/badge/build-passing-brightgreen.svg)
+![Manifest-Version](https://img.shields.io/github/last-commit/TitusStudiosMediaGroup/brightstar.svg)
+![Repo-Size](https://img.shields.io/github/repo-size/TitusStudiosMediaGroup/brightstar.svg)
+
 What does this mean?
 My E2 is now publicly available for use. The version found on here should be stable, however, there is always the chance that some bugs may remain in the code. Future updates are certain, and you will need to update your locomotives as time goes by. That means updating E2s, re-wiring dupes.
 
